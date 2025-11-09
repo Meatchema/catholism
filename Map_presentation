@@ -1,0 +1,15 @@
+<div class="world-map">
+    <div class="map-container">
+        <img src="world-map.png" alt="World Map" class="map-image">
+        <div class="marker" style="top: 30%; left: 50%;">New York</div>
+        <div class="marker" style="top: 40%; left: 60%;">London</div>
+        <div class="marker" style="top: 50%; left: 70%;">Tokyo</div>
+</div>
+    </div>
+
+<div class="side-panel">
+    <div class="container">
+        <h1 class="country-name">Germany</h1>
+        
+    </div>
+</div>
