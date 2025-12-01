@@ -17,10 +17,40 @@
       margin: 0;
       font-family: Arial, sans-serif;
     }
-    #map {
-      height: 100vh;  /* full screen */
-      width: 100%;
-    }
+
+  #map {
+    height: 100vh;  /* full screen */
+    width: 100%;
+  }
+  
+  /* Side panel */
+  .side-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    background: white;
+    box-sizing: border-box;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    z-index: 1000;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  .side-panel h1 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  #info-desc {
+    line-height: 1.5;
+    color: #555;
+    font-size: 0.9rem;
+  }
     /* Legend styles */
     .legend {
       background: white;
@@ -60,6 +90,10 @@
 <body>
   <!-- Map container -->
   <div id="map"></div>
+    <div class="side-panel">
+    <h1 id="info-title">Select a location</h1>
+    <div id="info-desc">Click a marker on the map to see details here.</div>
+  </div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -74,6 +108,10 @@
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    function updateSidePanel(name, info) {
+      document.getElementById('info-title').textContent = name;
+      document.getElementById('info-desc').innerHTML = info;
+    }
     // Example clickable locations
     // ============================================================================
 // SSPX (Society of St. Pius X) - Recognize Pope but resist Vatican II
@@ -680,6 +718,10 @@ const extremistLocations = allExtremistLocations;  // ~40 locations
       }).addTo(map);
       
       circle.bindPopup(loc.info);
+       // Update side panel on click
+      circle.on('click', function() {
+        updateSidePanel(loc.name, loc.info);
+      });
     });
 
     // Map American Extremist Catholic locations (BLUE markers)
@@ -692,6 +734,10 @@ const extremistLocations = allExtremistLocations;  // ~40 locations
       }).addTo(map);
       
       circle.bindPopup(loc.info);
+             // Update side panel on click
+      circle.on('click', function() {
+        updateSidePanel(loc.name, loc.info);
+      });
     });
         // ===== ADD LEGEND =====
     const legend = L.control({ position: 'bottomright' });
