@@ -80,9 +80,13 @@
       border: 2px solid red;
     }
     
-    .legend .extremist {
+    .legend .sedevacantist {
       background: #03f;
       border: 2px solid blue;
+    }
+    .legend .non-sedevacantist {
+      background: rgb(0, 247, 255);
+      border: 2px solid rgb(0, 247, 255);
     }
   </style>
 </head>
@@ -672,6 +676,46 @@ const independentSedevacantist = [
   }
 ];
 
+// Independent Sedevacantist Churches
+// Non-Sedevacantist Catholic Extremist Groups (USA)
+const nonSedevacantist = [
+  {
+    name: "St. Benedict Center (Richmond), Richmond, New Hampshire",
+    coords: [42.7545, -72.2773],
+    info: "<strong>St. Benedict Center (Richmond)</strong><br>Feeneyite extremists. NOT sedevacantist.<br>Declared NOT Catholic by Diocese of Manchester 2019.<br>SPLC-designated hate group for antisemitism."
+  },
+  {
+    name: "St. Benedict Center (Still River), Harvard, Massachusetts",
+    coords: [42.4831, -71.6222],
+    info: "<strong>Slaves of the Immaculate Heart of Mary (Still River)</strong><br>Feeneyite. Canonically recognized by Diocese of Worcester.<br>Less extreme than Richmond branch but maintains traditionalist stance."
+  },
+  {
+    name: "St. Benedict Center (Vienna), Vienna, Ohio",
+    coords: [41.2209, -80.6473],
+    info: "<strong>Slaves of the Immaculate Heart of Mary (Vienna)</strong><br>Feeneyite splinter community.<br>Maintains strict pre-Vatican II practices."
+  },
+  {
+    name: "Tradition in Action, Los Angeles, California",
+    coords: [34.0522, -118.2437],
+    info: "<strong>Tradition in Action (TIA)</strong><br>Radical anti-Vatican II publishing organization.<br>Promotes antisemitic conspiracy theories.<br>Founded by Atila Sinke Guimarães."
+  },
+  {
+    name: "Catholic Apologetics International, State Line, Pennsylvania",
+    coords: [39.7211, -77.7233],
+    info: "<strong>Catholic Apologetics International</strong><br>Robert Sungenis. Extreme antisemitism.<br>Geocentrist (believes Earth is center of universe).<br>Produces antisemitic materials."
+  },
+  {
+    name: "Catholic Counterpoint, Broomhall, Pennsylvania",
+    coords: [39.9831, -75.3516],
+    info: "<strong>Catholic Counterpoint</strong><br>John Maffei. Holocaust denial.<br>Publishing enterprise selling extremist materials."
+  },
+  {
+    name: "Catholic Family Ministries, Niagara Falls, New York",
+    coords: [43.0962, -79.0377],
+    info: "<strong>Catholic Family News</strong><br>John Vennari (former Holy Family Monastery monk).<br>Calls Judaism 'part of the Kingdom of Satan'.<br>Monthly radical traditionalist publication."
+  }
+];
+
 // ============================================================================
 // COMBINE ALL LOCATIONS
 // ============================================================================
@@ -687,8 +731,8 @@ const allSSPXLocations = [
   ...sspxAfrica
 ];
 
-// All Catholic Extremist Locations (USA only - Various beliefs about papacy)
-const allExtremistLocations = [
+// Sedevacantist Catholic Extremist Locations (USA only - Various beliefs about papacy)
+const americanCatholicSedevacantist = [
   ...cmriChurches,
   ...stGertrudeNetwork,
   ...sspvChurches,
@@ -698,16 +742,20 @@ const allExtremistLocations = [
   ...independentSedevacantist
 ];
 
-// MASTER ARRAY - All locations combined
-const locations = [
-  ...allSSPXLocations,
-  ...allExtremistLocations
+const americanCatholicNonSedevacantist = [
+  ...nonSedevacantist
 ];
 
-// Optional: If you want to separate them on the map with different markers
-const sspxLocations = allSSPXLocations;      // ~60 locations
-const extremistLocations = allExtremistLocations;  // ~40 locations
+// All locations combined
+const locations = [
+  ...allSSPXLocations,
+  ...americanCatholicSedevacantist,
+  ...americanCatholicNonSedevacantist
+];
 
+// Seperates  them on the map with different markers
+// Seperates  them on the map with different markers
+const sspxLocations = allSSPXLocations;      // ~60 locations
     // Map SSPX locations (RED markers)
     allSSPXLocations.forEach(loc => {
       const circle = L.circleMarker(loc.coords, {
@@ -724,22 +772,36 @@ const extremistLocations = allExtremistLocations;  // ~40 locations
       });
     });
 
-    // Map American Extremist Catholic locations (BLUE markers)
-    allExtremistLocations.forEach(loc => {
+    // American Catholic Sedevacantist locations (BLUE markers)
+    americanCatholicSedevacantist.forEach(loc => {
       const circle = L.circleMarker(loc.coords, {
-        radius: 8,
-        color: "blue",
-        fillColor: "#03f",
-        fillOpacity: 0.6
+      radius: 8,
+      color: "blue",
+      fillColor: "#03f",
+      fillOpacity: 0.6
       }).addTo(map);
       
       circle.bindPopup(loc.info);
-             // Update side panel on click
+         // Updates side panel on click
       circle.on('click', function() {
-        updateSidePanel(loc.name, loc.info);
+      updateSidePanel(loc.name, loc.info);
       });
     });
-        // ===== ADD LEGEND =====
+      americanCatholicNonSedevacantist.forEach(loc => {
+      const circle = L.circleMarker(loc.coords, {
+      radius: 8,
+      color: "black",
+      fillColor: "#03f",
+      fillOpacity: 0.6
+      }).addTo(map);
+      
+      circle.bindPopup(loc.info);
+         // Updates side panel on click
+      circle.on('click', function() {
+      updateSidePanel(loc.name, loc.info);
+      });
+    });
+        // Legend
     const legend = L.control({ position: 'bottomright' });
 
     legend.onAdd = function(map) {
@@ -747,7 +809,8 @@ const extremistLocations = allExtremistLocations;  // ~40 locations
       div.innerHTML = `
         <h4>Church Types</h4>
         <div><i class="sspx"></i> SSPX Chapels(${allSSPXLocations.length})</div>
-        <div><i class="extremist"></i> Sedevacantist Chapels(${allExtremistLocations.length})</div>
+        <div><i class="sedevacantist"></i> USA Sedevacantist Chapels(${americanCatholicSedevacantist.length})</div>
+        <div><i class="non-sedevacantist"></i> USA Non-Sedevacantist Chapels(${americanCatholicNonSedevacantist.length})</div>
       `;
       return div;
     };
@@ -756,4 +819,3 @@ const extremistLocations = allExtremistLocations;  // ~40 locations
   </script>
 </body>
 </html>
-
