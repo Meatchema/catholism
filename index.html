@@ -89,7 +89,7 @@
     }
     .legend .non-sedevacantist {
       background: rgb(0, 247, 255);
-      border: 2px solid rgb(0, 247, 255);
+      border: 2px solid blue;
     }
   </style>
 </head>
@@ -789,8 +789,8 @@ const sspxLocations = allSSPXLocations;      // ~60 locations
       americanCatholicNonSedevacantist.forEach(loc => {
       const circle = L.circleMarker(loc.coords, {
       radius: 8,
-      color: "black",
-      fillColor: "#03f",
+      color: "blue",
+      fillColor: "rgb(0, 247, 255)",
       fillOpacity: 0.6
       }).addTo(map);
       
